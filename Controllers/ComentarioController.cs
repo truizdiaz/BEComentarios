@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,31 @@ namespace BEComentarios.Controllers
     [ApiController]
     public class ComentarioController : ControllerBase
     {
+        private readonly AplicationDbContext _context;
+
+        public ComentarioController(AplicationDbContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/<ComentarioController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "Angular", "React" };
+            try
+            {
+                var listComentarios = await _context.Comentario.ToListAsync();
+
+                return Ok(listComentarios);
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
         }
 
         // GET api/<ComentarioController>/5
