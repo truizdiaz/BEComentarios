@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +33,10 @@ namespace BEComentarios
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BEComentarios", Version = "v1" });
             });
+
+            string mySqlConnection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AplicationDbContext>(options =>
+                    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
